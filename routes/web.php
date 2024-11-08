@@ -1,9 +1,7 @@
 <?php
-use App\Http\Controllers\PeminjamanController;
 
-Route::get('/peminjaman/create', [PeminjamanController::class, 'create'])->name('peminjaman.create');
-Route::post('/peminjaman/store', [PeminjamanController::class, 'store'])->name('peminjaman.store');
+use App\Http\Controllers\SportsEquipmentController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::resource('equipment', SportsEquipmentController::class)->except(['show']);
+Route::get('equipment/{id}/book', [SportsEquipmentController::class, 'book'])->name('equipment.book');
+Route::post('equipment/{id}/book', [SportsEquipmentController::class, 'storeBooking'])->name('equipment.storeBooking');
