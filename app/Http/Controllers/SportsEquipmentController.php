@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SportsEquipment;
 use App\Models\Booking;
+use Illuminate\Support\Facades\Storage;  // Pastikan ini ada
 
 class SportsEquipmentController extends Controller
 {
@@ -28,11 +29,21 @@ class SportsEquipmentController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'quantity' => 'required|integer|min:1',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
-        SportsEquipment::create($request->all());
+        // Menyimpan gambar di storage/public/sports_images
+        $imagePath = $request->file('image')->store('sports_images', 'public');
 
-        return redirect()->route('equipment.index')->with('success', 'Barang olahraga berhasil ditambahkan.');
+        // Menyimpan data barang ke database
+        SportsEquipment::create([
+            'name' => $request->name,
+            'description' => $request->description,
+            'quantity' => $request->quantity,
+            'image' => $imagePath,  // Menyimpan path gambar
+        ]);
+
+        return redirect()->route('equipment.index')->with('success', 'Barang berhasil ditambahkan.');
     }
 
     // Menampilkan form edit barang
@@ -49,10 +60,22 @@ class SportsEquipmentController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'quantity' => 'required|integer|min:0',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Bisa null jika tidak ada perubahan gambar
         ]);
 
         $equipment = SportsEquipment::findOrFail($id);
-        $equipment->update($request->all());
+
+        if ($request->hasFile('image')) {
+            // Jika ada gambar baru, simpan dan update path gambar
+            $imagePath = $request->file('image')->store('sports_images', 'public');
+            $equipment->image = $imagePath;  // Perbarui gambar
+        }
+
+        $equipment->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'quantity' => $request->quantity,
+        ]);
 
         return redirect()->route('equipment.index')->with('success', 'Barang olahraga berhasil diperbarui.');
     }
@@ -61,6 +84,12 @@ class SportsEquipmentController extends Controller
     public function destroy($id)
     {
         $equipment = SportsEquipment::findOrFail($id);
+
+        // Menghapus gambar dari storage jika ada
+        if ($equipment->image && Storage::exists('public/' . $equipment->image)) {
+            Storage::delete('public/' . $equipment->image);
+        }
+
         $equipment->delete();
 
         return redirect()->route('equipment.index')->with('success', 'Barang olahraga berhasil dihapus.');
