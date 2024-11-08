@@ -14,7 +14,7 @@
         <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
         <link href="https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700" rel="stylesheet" type="text/css" />
         <!-- Core theme CSS (includes Bootstrap)-->
-        <link href="{{ asset('template/css/styles.css') }}" rel="stylesheet" />
+        <link href="{{ asset('template/css/style.css') }}" rel="stylesheet" />
     </head>
     <body id="page-top">
         <!-- Navigation-->
@@ -31,6 +31,6 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
-        <script src="{{ asset('template/js/scripts.js') }}"></script>
+        <script src="{{ asset('template/js/script.js') }}"></script>
     </body>
 </html>

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Daftar Alat Olahraga')
+@section('title', 'NesZport - Pinjam alat olahraga')
 
 @section('content')
     <header class="masthead">
