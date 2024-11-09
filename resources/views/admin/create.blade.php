@@ -1,27 +1,29 @@
+<!-- resources/views/admin/create.blade.php -->
 @extends('layouts.app')
 
 @section('content')
-<div class="container mt-5">
-    <h1 class="text-center">Tambah Barang Olahraga</h1>
-    <form action="{{ route('equipment.store') }}" method="POST" enctype="multipart/form-data">
+<div class="container">
+    <h1>Tambah Admin</h1>
+    <form action="{{ route('admin.store') }}" method="POST">
         @csrf
-        <div class="mb-3">
-            <label for="name" class="form-label">Nama Barang</label>
-            <input type="text" class="form-control" id="name" name="name" required>
+        <div class="form-group">
+            <label>Nama</label>
+            <input type="text" name="name" class="form-control" required>
         </div>
-        <div class="mb-3">
-            <label for="description" class="form-label">Deskripsi</label>
-            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" required>
         </div>
-        <div class="mb-3">
-            <label for="quantity" class="form-label">Jumlah</label>
-            <input type="number" class="form-control" id="quantity" name="quantity" required>
+        <div class="form-group">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required>
         </div>
-        <div class="mb-3">
-            <label for="image" class="form-label">Gambar Barang</label>
-            <input type="file" class="form-control" id="image" name="image" required>
+        <div class="form-group">
+            <label>Konfirmasi Password</label>
+            <input type="password" name="password_confirmation" class="form-control" required>
         </div>
-        <button type="submit" class="btn btn-primary">Tambah Barang</button>
+        <button type="submit" class="btn btn-success mt-3">Simpan</button>
+        <a href="{{ route('admin.index') }}" class="btn btn-secondary mt-3">Kembali</a>
     </form>
 </div>
 @endsection
