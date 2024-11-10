@@ -4,6 +4,7 @@ use App\Http\Controllers\SportsEquipmentController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PeminjamanController;
 
 // Rute untuk halaman utama (menampilkan daftar barang)
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -29,3 +30,7 @@ Route::resource('barang', BarangController::class);  // Jika barang dikelola ole
 // Rute tambahan untuk stok barang
 Route::get('/admin/barang/stok', [BarangController::class, 'showStok'])->name('admin.barang.stok');
 Route::post('/admin/barang/update-stok/{id}', [BarangController::class, 'updateStok'])->name('admin.barang.update-stok');
+
+//Route peminjaman dan pengembalian
+Route::post('/peminjaman/{barangId}', [PeminjamanController::class, 'storePeminjaman'])->name('peminjaman.store');
+Route::post('/pengembalian/{peminjamanId}', [PeminjamanController::class, 'storePengembalian'])->name('pengembalian.store');

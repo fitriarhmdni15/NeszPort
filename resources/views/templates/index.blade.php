@@ -22,7 +22,7 @@
     <!-- Masthead-->
     @include('templates.components.header')
 
-    <!-- Portfolio Grid-->
+    <!-- Data Barang-->
     <section class="page-section bg-light" id="portfolio">
         <div class="container">
             <div class="text-center">
@@ -38,7 +38,6 @@
                             <div class="portfolio-hover">
                                 <div class="portfolio-hover-content"><i class="fas fa-plus fa-3x"></i></div>
                             </div>
-                            <!-- Menampilkan gambar barang -->
                             <img class="img-fluid" src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->nama_barang }}" />
                         </a>
                         <div class="portfolio-caption">
@@ -47,40 +46,94 @@
                         </div>
                     </div>
                 </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
 
-    <!-- Portfolio Modals -->
-    @foreach($barang as $item)
-    <div class="portfolio-modal modal fade" id="portfolioModal{{ $item->id }}" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="close-modal" data-bs-dismiss="modal"><img src="{{ asset('template/close-icon.svg') }}" alt="Close modal" /></div>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-8">
-                            <div class="modal-body">
-                                <!-- Project details -->
-                                <h2 class="text-uppercase">{{ $item->nama_barang }}</h2>
-                                <p class="item-intro text-muted">{{ $item->deskripsi }}</p>
-                                <!-- Menampilkan gambar barang di modal -->
-                                <img class="img-fluid d-block mx-auto" src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->nama_barang }}" />
-                                <p>Stok tersedia: <strong>{{ $item->jumlah }}</strong></p>
-                                <button class="btn btn-primary btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
-                                    <i class="fas fa-xmark me-1"></i>
-                                    Tutup
-                                </button>
+                <!-- Modal Barang -->
+                <div class="portfolio-modal modal fade" id="portfolioModal{{ $item->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="container">
+                                <div class="row justify-content-center">
+                                    <div class="col-lg-8">
+                                        <div class="modal-body">
+                                            <!-- Project details -->
+                                            <h2 class="text-uppercase">{{ $item->nama_barang }}</h2>
+                                            <p class="item-intro text-muted">{{ $item->deskripsi }}</p>
+                                            <img class="img-fluid d-block mx-auto" src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->nama_barang }}" />
+                                            <p>Stok tersedia: <strong>{{ $item->jumlah }}</strong></p>
+
+                                            @if($item->jumlah > 0)
+                                                <button type="button" class="btn btn-success btn-xl text-uppercase" data-bs-toggle="modal" data-bs-target="#pinjamModal{{ $item->id }}">
+                                                    Pinjam
+                                                </button>
+                                            @else
+                                                <button type="button" class="btn btn-secondary btn-xl text-uppercase" disabled>
+                                                    Stok Habis
+                                                </button>
+                                            @endif
+
+                                            <a class="btn btn-warning btn-xl text-uppercase" data-bs-toggle="modal" href="#pengembalianModal{{ $item->id }}">
+                                                <i class="fas fa-undo"></i> Pengembalian
+                                            </a>
+                                            <button class="btn btn-danger btn-xl text-uppercase" data-bs-dismiss="modal" type="button">
+                                                <i class="fas fa-xmark me-1"></i> Tutup
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    @endforeach
 
+                <!-- Modal Peminjaman -->
+                <div class="modal fade" id="pinjamModal{{ $item->id }}" tabindex="-1" aria-labelledby="pinjamModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="pinjamModalLabel">Pinjam Barang: {{ $item->nama_barang }}</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="{{ route('peminjaman.store', $item->id) }}" method="POST">
+                                    @csrf
+                                    <div class="mb-3">
+                                        <label for="nama_peminjam" class="form-label">Nama Peminjam</label>
+                                        <input type="text" class="form-control" id="nama_peminjam" name="nama_peminjam" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="kelas_jurusan" class="form-label">Kelas dan Jurusan</label>
+                                        <input type="text" class="form-control" id="kelas_jurusan" name="kelas_jurusan" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="tanggal_peminjaman" class="form-label">Tanggal dan Waktu Peminjaman</label>
+                                        <input type="datetime-local" class="form-control" id="tanggal_peminjaman" name="tanggal_peminjaman" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Pinjam</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal Pengembalian -->
+                <div class="modal fade" id="pengembalianModal{{ $item->id }}" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <h2>Form Pengembalian</h2>
+                                <form action="{{ route('pengembalian.store', $item->id) }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label>Tanggal & Waktu Pengembalian</label>
+                                        <input type="datetime-local" class="form-control" name="tanggal_pengembalian" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @endforeach
     <!-- Footer-->
     @include('templates.components.footer')
 
