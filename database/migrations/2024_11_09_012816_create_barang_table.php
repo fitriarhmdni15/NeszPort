@@ -14,9 +14,8 @@ return new class extends Migration
         Schema::create('barang', function (Blueprint $table) {
             $table->id();
             $table->string('nama_barang');
-            $table->string('kategori'); // Misalnya: Bola, Raket, dll
+            $table->string('image')->nullable();
             $table->integer('jumlah'); // Total barang yang tersedia
-            $table->text('deskripsi')->nullable();
             $table->timestamps();
         });
     }

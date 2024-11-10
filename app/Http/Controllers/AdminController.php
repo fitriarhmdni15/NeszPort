@@ -3,20 +3,24 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
+use App\Models\Barang; // Pastikan model Barang ada
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
-    public function index()
+    public function dashboard()
     {
-        $admins = Admin::all();
-        return view('admin.index', compact('admins'));
+        $barang = Barang::all();  // Ambil semua barang
+        $admins = Admin::all();   // Ambil semua admin
+
+        // Kirim data barang dan admin ke view dashboard
+        return view('admin.dashboard', compact('barang', 'admins'));
     }
 
     public function create()
     {
-        return view('admin.create');
+        return view('admin.datadmin.create');
     }
 
     public function store(Request $request)
@@ -33,13 +37,13 @@ class AdminController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return redirect()->route('admin.index')->with('success', 'Admin berhasil ditambahkan');
+        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil ditambahkan');
     }
 
     public function edit($id)
     {
         $admin = Admin::findOrFail($id);
-        return view('admin.edit', compact('admin'));
+        return view('admin.datadmin.edit', compact('admin'));
     }
 
     public function update(Request $request, $id)

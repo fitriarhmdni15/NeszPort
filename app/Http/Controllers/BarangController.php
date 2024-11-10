@@ -3,36 +3,54 @@
 namespace App\Http\Controllers;
 
 use App\Models\Barang;
+use App\Models\Admin;
 use Illuminate\Http\Request;
 
 class BarangController extends Controller
 {
     public function index()
     {
+        // Ambil data barang dan data admin
         $barang = Barang::all();
-        return view('barang.index', compact('barang'));
+        $admins = Admin::all();  // Ambil semua data admin
+
+        // Kirim data barang dan admin ke view dashboard
+        return view('admin.dashboard', compact('barang', 'admins'));
     }
 
     public function create()
     {
-        return view('barang.create');
+        return view('admin.barang.create');
     }
 
     public function store(Request $request)
     {
+        // Validasi data yang masuk
         $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'jumlah' => 'required|integer',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validasi untuk file gambar
+            'jumlah' => 'required|integer|min:1',
         ]);
 
-        Barang::create($request->all());
+        // Menyimpan gambar ke folder public/images
+        $imagePath = $request->file('image')->store('images', 'public');  // menyimpan gambar
+
+        // Simpan barang ke database
+        Barang::create([
+            'nama_barang' => $request->nama_barang,
+            'image' => $imagePath, // menyimpan path gambar
+            'jumlah' => $request->jumlah,
+        ]);
+
         return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan');
     }
+
+
 
     public function edit($id)
     {
         $barang = Barang::findOrFail($id);
-        return view('barang.edit', compact('barang'));
+        return view('admin.barang.edit', compact('barang'));
     }
 
     public function update(Request $request, $id)
