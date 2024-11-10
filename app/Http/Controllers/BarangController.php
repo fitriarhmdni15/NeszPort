@@ -25,27 +25,19 @@ class BarangController extends Controller
 
     public function store(Request $request)
     {
-        // Validasi data yang masuk
-        $request->validate([
+        $validated = $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Validasi untuk file gambar
-            'jumlah' => 'required|integer|min:1',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'jumlah' => 'required|integer',
         ]);
 
-        // Menyimpan gambar ke folder public/images
-        $imagePath = $request->file('image')->store('images', 'public');  // menyimpan gambar
+        $path = $request->file('image')->store('images', 'public');
+        $validated['image'] = $path;
 
-        // Simpan barang ke database
-        Barang::create([
-            'nama_barang' => $request->nama_barang,
-            'image' => $imagePath, // menyimpan path gambar
-            'jumlah' => $request->jumlah,
-        ]);
+        Barang::create($validated);
 
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil ditambahkan');
+        return redirect()->route('admin.dashboard')->with('success', 'Barang berhasil ditambahkan.');
     }
-
-
 
     public function edit($id)
     {
@@ -53,24 +45,29 @@ class BarangController extends Controller
         return view('admin.barang.edit', compact('barang'));
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, Barang $barang)
     {
-        $request->validate([
+        $validated = $request->validate([
             'nama_barang' => 'required|string|max:255',
-            'kategori' => 'required|string|max:100',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             'jumlah' => 'required|integer',
         ]);
 
-        $barang = Barang::findOrFail($id);
-        $barang->update($request->all());
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil diperbarui');
+        if ($request->hasFile('image')) {
+            $path = $request->file('image')->store('images', 'public');
+            $validated['image'] = $path;
+        }
+
+        $barang->update($validated);
+
+        return redirect()->route('admin.dashboard')->with('success', 'Barang berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         $barang = Barang::findOrFail($id);
         $barang->delete();
-        return redirect()->route('barang.index')->with('success', 'Barang berhasil dihapus');
+        return redirect()->route('admin.dashboard')->with('success', 'Barang berhasil dihapus');
     }
 
     // Menampilkan stok barang untuk admin

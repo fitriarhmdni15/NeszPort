@@ -7,22 +7,19 @@
     <form action="{{ route('barang.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="form-group">
-            <label for="nama_barang">Nama Barang</label>
-            <input type="text" class="form-control" id="nama_barang" name="nama_barang" required>
+            <label>Nama Barang</label>
+            <input type="text" name="nama_barang" class="form-control" required>
         </div>
-
         <div class="form-group">
-            <label for="image">Gambar Barang</label>
-            <input type="file" class="form-control" id="image" name="image" required>
+            <label>Gambar Barang</label>
+            <input type="file" name="image" class="form-control" required>
         </div>
-
         <div class="form-group">
-            <label for="jumlah">Jumlah</label>
-            <input type="number" class="form-control" id="jumlah" name="jumlah" required>
+            <label>Jumlah</label>
+            <input type="number" name="jumlah" class="form-control" required>
         </div>
-
-        <button type="submit" class="btn btn-success mt-3">Simpan Barang</button>
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary mt-3">Kembali</a>
+        <button type="submit" class="btn btn-primary mt-3">Simpan</button>
+        <a href="{{ route('barang.index') }}" class="btn btn-secondary mt-3">Kembali</a>
     </form>
 </div>
 @endsection

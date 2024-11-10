@@ -67,7 +67,7 @@ class AdminController extends Controller
 
         $admin->update($data);
 
-        return redirect()->route('admin.index')->with('success', 'Admin berhasil diperbarui');
+        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil diperbarui');
     }
 
     public function destroy($id)
@@ -75,6 +75,6 @@ class AdminController extends Controller
         $admin = Admin::findOrFail($id);
         $admin->delete();
 
-        return redirect()->route('admin.index')->with('success', 'Admin berhasil dihapus');
+        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil dihapus');
     }
 }
