@@ -105,6 +105,10 @@
                                         <input type="text" class="form-control" id="kelas_jurusan" name="kelas_jurusan" required>
                                     </div>
                                     <div class="mb-3">
+                                        <label for="jumlah_peminjaman" class="form-label">Jumlah Peminjaman</label>
+                                        <input type="number" class="form-control" id="jumlah_peminjaman" name="jumlah_peminjaman" min="1" max="{{ $item->jumlah }}" required>
+                                    </div>
+                                    <div class="mb-3">
                                         <label for="tanggal_peminjaman" class="form-label">Tanggal dan Waktu Peminjaman</label>
                                         <input type="datetime-local" class="form-control" id="tanggal_peminjaman" name="tanggal_peminjaman" required>
                                     </div>

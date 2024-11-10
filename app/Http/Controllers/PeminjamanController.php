@@ -5,55 +5,60 @@ namespace App\Http\Controllers;
 use App\Models\Peminjaman;
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 
 class PeminjamanController extends Controller
 {
-    public function storePeminjaman(Request $request, $barangId)
+    public function storePeminjaman(Request $request, $barang_id)
     {
-        $barang = Barang::findOrFail($barangId);
+        $barang = Barang::findOrFail($barang_id);
 
-        // Cek stok barang
-        if ($barang->jumlah <= 0) {
-            return redirect()->back()->with('error', 'Barang ini tidak tersedia untuk dipinjam.');
+        if ($barang->jumlah < $request->jumlah_peminjaman) {
+            return redirect()->back()->with('error', 'Stok tidak cukup!');
         }
 
-        $request->validate([
-            'nama_peminjam' => 'required|string|max:255',
-            'kelas_jurusan' => 'required|string|max:255',
-            'tanggal_peminjaman' => 'required|date',
-        ]);
-
-        // Simpan data peminjaman
-        Peminjaman::create([
-            'barang_id' => $barang->id,
+        // Simpan riwayat peminjaman dalam session
+        $peminjamanData = [
+            'barang_id' => $barang_id,
+            'jumlah_peminjaman' => $request->jumlah_peminjaman,
             'nama_peminjam' => $request->nama_peminjam,
             'kelas_jurusan' => $request->kelas_jurusan,
             'tanggal_peminjaman' => $request->tanggal_peminjaman,
-        ]);
+        ];
 
-        // Kurangi stok barang
-        $barang->decrement('jumlah');
+        // Jika session 'peminjaman' belum ada, buat array kosong
+        $peminjamanHistory = session()->get('peminjaman', []);
+        $peminjamanHistory[] = $peminjamanData;  // Menambahkan peminjaman baru ke riwayat
+        session()->put('peminjaman', $peminjamanHistory);
 
-        return redirect()->back()->with('success', 'Peminjaman berhasil disimpan.');
+        // Kurangi stok barang yang dipinjam
+        $barang->jumlah -= $request->jumlah_peminjaman;
+        $barang->save();
+
+        return redirect()->route('barang.index')->with('success', 'Peminjaman berhasil!');
     }
 
     public function storePengembalian(Request $request, $peminjamanId)
     {
-        $request->validate([
-            'tanggal_pengembalian' => 'required|date',
-        ]);
+            // Ambil riwayat peminjaman dari session
+    $peminjamanHistory = session()->get('peminjaman', []);
 
-        $peminjaman = Peminjaman::findOrFail($peminjamanId);
-        $barang = $peminjaman->barang;
+    // Cari peminjaman terakhir berdasarkan barang_id
+    $peminjaman = end($peminjamanHistory);  // Ambil peminjaman terakhir
+    $barang = Barang::findOrFail($peminjaman['barang_id']);
 
-        // Simpan tanggal pengembalian
-        $peminjaman->update([
-            'tanggal_pengembalian' => $request->tanggal_pengembalian,
-        ]);
-
-        // Kembalikan stok barang
-        $barang->increment('jumlah');
-
-        return redirect()->back()->with('success', 'Pengembalian berhasil disimpan.');
+    // Validasi pengembalian jumlah yang sesuai
+    if ($barang->jumlah < 0) {
+        return redirect()->back()->with('error', 'Jumlah barang tidak sesuai untuk pengembalian!');
     }
+
+    // Tambahkan kembali jumlah barang yang dipinjam ke stok
+    $barang->jumlah += $peminjaman['jumlah_peminjaman'];
+    $barang->save();
+
+    // Hapus riwayat peminjaman dari session
+    session()->forget('peminjaman');
+
+    return redirect()->route('barang.index')->with('success', 'Barang berhasil dikembalikan!');
+}
 }

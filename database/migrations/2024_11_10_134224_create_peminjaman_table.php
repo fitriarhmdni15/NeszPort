@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('kelas_jurusan');
             $table->dateTime('tanggal_peminjaman');
             $table->dateTime('tanggal_pengembalian')->nullable(); // Null sampai barang dikembalikan
+            $table->integer('jumlah_peminjaman');
             $table->timestamps();
         });
     }
