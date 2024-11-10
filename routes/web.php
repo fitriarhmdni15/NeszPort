@@ -3,9 +3,10 @@
 use App\Http\Controllers\SportsEquipmentController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\HomeController;
 
 // Rute untuk halaman utama (menampilkan daftar barang)
-Route::get('/', [SportsEquipmentController::class, 'index'])->name('equipment.index');
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
 // Rute untuk halaman dashboard admin yang menampilkan daftar barang
 Route::get('/admin/dashboard', [BarangController::class, 'index'])->name('admin.dashboard');

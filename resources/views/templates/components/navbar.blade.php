@@ -8,7 +8,7 @@
             <ul class="navbar-nav text-uppercase ms-auto py-4 py-lg-0">
                 <li class="nav-item"><a class="nav-link" href="#portfolio">Data Barang</a></li>
                 <li class="nav-item"><a class="nav-link" href="#contact">Mulai Pinjam</a></li>
-                <li class="nav-item"><a class="nav-link" href="#contact">Admin</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard')}}">Admin</a></li>
             </ul>
         </div>
     </div>
