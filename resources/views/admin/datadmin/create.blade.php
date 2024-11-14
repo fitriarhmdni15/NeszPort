@@ -1,4 +1,3 @@
-<!-- resources/views/admin/create.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -7,12 +6,8 @@
     <form action="{{ route('admin.store') }}" method="POST">
         @csrf
         <div class="form-group">
-            <label>Nama</label>
-            <input type="text" name="name" class="form-control" required>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" required>
+            <label>Username</label>
+            <input type="text" name="username" class="form-control" required>
         </div>
         <div class="form-group">
             <label>Password</label>

@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('peminjaman', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('barang_id')->constrained('barang')->onDelete('cascade'); // Foreign key ke tabel barang
-            $table->string('nama_peminjam');
-            $table->string('kelas_jurusan');
-            $table->dateTime('tanggal_peminjaman');
-            $table->dateTime('tanggal_pengembalian')->nullable(); // Null sampai barang dikembalikan
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId('barang_id')->constrained('barang')->onDelete('cascade');
+            $table->string('nama_peminjam')->nullable();
             $table->integer('jumlah_peminjaman');
+            $table->timestamp('tanggal_peminjaman');
             $table->timestamps();
         });
     }

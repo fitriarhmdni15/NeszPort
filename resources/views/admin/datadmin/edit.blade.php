@@ -1,4 +1,3 @@
-<!-- resources/views/admin/edit.blade.php -->
 @extends('layouts.app')
 
 @section('content')
@@ -8,12 +7,8 @@
         @csrf
         @method('PUT')
         <div class="form-group">
-            <label>Nama</label>
-            <input type="text" name="name" class="form-control" value="{{ $admin->name }}" required>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" class="form-control" value="{{ $admin->email }}" required>
+            <label>Username</label>
+            <input type="text" name="username" class="form-control" value="{{ $admin->username }}" required>
         </div>
         <div class="form-group">
             <label>Password (opsional)</label>
@@ -24,7 +19,7 @@
             <input type="password" name="password_confirmation" class="form-control">
         </div>
         <button type="submit" class="btn btn-success mt-3">Update</button>
-        <a href="{{ route('admin.index') }}" class="btn btn-secondary mt-3">Kembali</a>
+        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary mt-3">Kembali</a>
     </form>
 </div>
 @endsection

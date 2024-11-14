@@ -16,4 +16,9 @@ class Barang extends Model
         'image',
         'jumlah',
     ];
+    public function peminjamans()
+    {
+        return $this->hasMany(Peminjaman::class);
+    }
+
 }

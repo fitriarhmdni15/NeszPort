@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Admin;
-use App\Models\Barang; // Pastikan model Barang ada
+use App\Models\Barang;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -11,10 +12,9 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $barang = Barang::all();  // Ambil semua barang
-        $admins = Admin::all();   // Ambil semua admin
+        $barang = Barang::all();  // Data barang tetap terlihat di dashboard
+        $admins = User::where('role', 'admin')->get();  // Data admin
 
-        // Kirim data barang dan admin ke view dashboard
         return view('admin.dashboard', compact('barang', 'admins'));
     }
 
@@ -25,56 +25,55 @@ class AdminController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:admin',
-            'password' => 'required|string|min:6|confirmed',
+        $validated = $request->validate([
+            'username' => 'required|string|max:255|unique:users,username',
+            'password' => 'required|confirmed|min:8',
         ]);
 
-        Admin::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        // Simpan admin baru dengan role 'admin'
+        $admin = User::create([
+            'username' => $validated['username'],
+            'password' => bcrypt($validated['password']),
+            'role' => 'admin', // Pastikan role adalah 'admin'
         ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil ditambahkan');
+        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil ditambahkan!');
     }
 
     public function edit($id)
     {
-        $admin = Admin::findOrFail($id);
+        $admin = User::findOrFail($id); // Gunakan model User
         return view('admin.datadmin.edit', compact('admin'));
     }
 
     public function update(Request $request, $id)
     {
-        $admin = Admin::findOrFail($id);
-
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:admin,email,' . $admin->id,
-            'password' => 'nullable|string|min:6|confirmed',
+        $validated = $request->validate([
+            'username' => 'required|string|max:255',
+            'password' => 'nullable|confirmed|min:8',
         ]);
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-        ];
+        $admin = User::findOrFail($id);
 
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+        // Update username
+        $admin->username = $validated['username'];
+
+        // Update password hanya jika diubah
+        if ($request->password) {
+            $admin->password = bcrypt($validated['password']);
         }
 
-        $admin->update($data);
+        // Tidak perlu mengubah role, karena sudah pasti admin
+        $admin->save();
 
-        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil diperbarui');
+        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
-        $admin = Admin::findOrFail($id);
-        $admin->delete();
+        User::findOrFail($id)->delete();
 
-        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil dihapus');
+        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil dihapus!');
     }
+
 }

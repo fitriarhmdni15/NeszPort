@@ -4,18 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Barang;
 use App\Models\Admin;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class BarangController extends Controller
 {
     public function index()
     {
-        // Ambil data barang dan data admin
-        $barang = Barang::all();
-        $admins = Admin::all();  // Ambil semua data admin
-
-        // Kirim data barang dan admin ke view dashboard
-        return view('admin.dashboard', compact('barang', 'admins'));
+        $barang = Barang::all(); // Ambil semua data barang
+        return view('templates.index', compact('barang')); // View untuk semua user
     }
 
     public function create()

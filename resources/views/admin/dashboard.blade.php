@@ -48,8 +48,7 @@
                 <thead>
                     <tr>
                         <th>No</th>
-                        <th>Nama</th>
-                        <th>Email</th>
+                        <th>Username</th> <!-- Ganti kolom ini -->
                         <th>Aksi</th>
                     </tr>
                 </thead>
@@ -57,8 +56,7 @@
                     @foreach($admins as $key => $admin)
                     <tr>
                         <td>{{ $key+1 }}</td>
-                        <td>{{ $admin->name }}</td>
-                        <td>{{ $admin->email }}</td>
+                        <td>{{ $admin->username }}</td> <!-- Tampilkan username -->
                         <td>
                             <a href="{{ route('admin.edit', $admin->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('admin.destroy', $admin->id) }}" method="POST" style="display:inline;">

@@ -7,18 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Peminjaman extends Model
 {
-    //
     use HasFactory;
-    protected $table = 'peminjaman';
+
+    protected $table = 'peminjaman'; // Pastikan nama tabel sesuai dengan migrasi
 
     protected $fillable = [
+        'user_id',
         'barang_id',
         'nama_peminjam',
-        'kelas_jurusan',
         'tanggal_peminjaman',
-        'tanggal_pengembalian',
+        'jumlah_peminjaman',
     ];
-
     public function barang()
     {
         return $this->belongsTo(Barang::class, 'barang_id');
