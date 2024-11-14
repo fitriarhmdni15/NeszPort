@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\Barang;
 use App\Models\User;
+use App\Models\Siswa;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -14,8 +15,9 @@ class AdminController extends Controller
     {
         $barang = Barang::all();  // Data barang tetap terlihat di dashboard
         $admins = User::where('role', 'admin')->get();  // Data admin
+        $siswa = User::where('role', 'siswa')->get();
 
-        return view('admin.dashboard', compact('barang', 'admins'));
+        return view('admin.dashboard', compact('barang', 'admins', 'siswa'));
     }
 
     public function create()

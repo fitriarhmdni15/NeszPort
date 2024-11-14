@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\SportsEquipmentController;
+use App\Http\Controllers\SiswaController;
 use App\Http\Controllers\BarangController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\HomeController;
@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
         Route::resource('admin', AdminController::class);
         // CRUD Barang alternatif
         Route::resource('barang', BarangController::class);
-
+        Route::resource('siswa', SiswaController::class);
         // Update stok barang
         Route::get('/admin/barang/stok', [BarangController::class, 'showStok'])->name('admin.barang.stok');
         Route::post('/admin/barang/update-stok/{id}', [BarangController::class, 'updateStok'])->name('admin.barang.update-stok');
