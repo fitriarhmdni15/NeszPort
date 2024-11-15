@@ -6,6 +6,7 @@ use App\Models\Admin;
 use App\Models\Barang;
 use App\Models\User;
 use App\Models\Siswa;
+use App\Models\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
@@ -16,8 +17,9 @@ class AdminController extends Controller
         $barang = Barang::all();  // Data barang tetap terlihat di dashboard
         $admins = User::where('role', 'admin')->get();  // Data admin
         $siswa = User::where('role', 'siswa')->get();
+        $peminjaman = Peminjaman::with('barang', 'user')->get();
 
-        return view('admin.dashboard', compact('barang', 'admins', 'siswa'));
+        return view('admin.dashboard', compact('barang', 'admins', 'siswa', 'peminjaman'));
     }
 
     public function create()

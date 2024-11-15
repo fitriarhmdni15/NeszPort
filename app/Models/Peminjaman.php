@@ -22,4 +22,8 @@ class Peminjaman extends Model
     {
         return $this->belongsTo(Barang::class, 'barang_id');
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

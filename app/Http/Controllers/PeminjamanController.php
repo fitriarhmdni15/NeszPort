@@ -38,10 +38,11 @@ class PeminjamanController extends Controller
         if (auth()->user()->role !== 'siswa') {
             abort(403, 'Akses Ditolak');
         }
-
+        $request->validate([
+            'bukti_pengembalian' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Validasi file gambar
+        ]); 
         // Ambil peminjaman dari database
         $peminjaman = Peminjaman::findOrFail($peminjamanId);
-
         // Ambil barang terkait
         $barang = Barang::findOrFail($peminjaman->barang_id);
 
