@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('peminjaman', function (Blueprint $table) {
             //
-            $table->string('bukti_pengembalian')->nullable()->after('jumlah_peminjaman');
+            $table->timestamp('waktu_pengembalian')->nullable()->after('bukti_pengembalian');
         });
     }
 
@@ -24,7 +24,6 @@ return new class extends Migration
     {
         Schema::table('peminjaman', function (Blueprint $table) {
             //
-            $table->dropColumn('bukti_pengembalian');
         });
     }
 };

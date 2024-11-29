@@ -17,8 +17,11 @@ Route::middleware('auth')->group(function () {
 
     // Rute yang hanya dapat diakses oleh admin
     Route::middleware(['can:isAdmin'])->group(function() {
-        // Dashboard Admin
-        Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+        Route::get('/data-siswa', [AdminController::class, 'dataSiswa'])->name('admin.data_siswa');
+        Route::get('/data-barang', [AdminController::class, 'dataBarang'])->name('admin.data_barang');
+        Route::get('/data-admin', [AdminController::class, 'dataAdmin'])->name('admin.data_admin');
+        Route::get('/data-peminjam', [AdminController::class, 'dataPeminjam'])->name('admin.data_peminjam');
 
         // Admin CRUD
         Route::resource('admin', AdminController::class);

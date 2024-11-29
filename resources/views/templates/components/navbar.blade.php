@@ -10,7 +10,7 @@
                     <a class="nav-link" href="{{ route('home') }}">Data Barang</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('peminjaman.history') }}">Riwayat Peminjaman</a> 
+                    <a class="nav-link" href="{{ route('peminjaman.history') }}">Riwayat Peminjaman</a>
                 </li>
                 <li class="nav-item">
                     <form action="{{ route('logout') }}" method="POST" class="d-inline">

@@ -100,20 +100,28 @@
                                 <div class="modal-body">
                                     <form action="{{ route('peminjaman.store', $item->id) }}" method="POST">
                                         @csrf
+                                        <!-- Nama Peminjam -->
                                         <div class="mb-3">
                                             <label for="nama_peminjam" class="form-label">Nama Peminjam</label>
-                                            <input type="text" class="form-control" id="nama_peminjam" name="nama_peminjam" required>
+                                            <input type="text" class="form-control" id="nama_peminjam" name="nama_peminjam" value="{{ auth()->user()->name }}" readonly>
                                         </div>
+
+                                        <!-- Kelas dan Jurusan -->
                                         <div class="mb-3">
                                             <label for="kelas_jurusan" class="form-label">Kelas dan Jurusan</label>
-                                            <input type="text" class="form-control" id="kelas_jurusan" name="kelas_jurusan" required>
+                                            <input type="text" class="form-control" id="kelas_jurusan" name="kelas_jurusan" value="{{ auth()->user()->kelas }}" readonly>
                                         </div>
+
+                                        <!-- Tanggal dan Waktu Peminjaman -->
                                         <div class="mb-3">
                                             <label for="tanggal_peminjaman" class="form-label">Tanggal dan Waktu Peminjaman</label>
                                             <input type="datetime-local" class="form-control" id="tanggal_peminjaman" name="tanggal_peminjaman" required>
                                         </div>
+
+                                        <!-- Jumlah Peminjaman -->
                                         <label for="jumlah_peminjaman">Jumlah Peminjaman</label>
                                         <input type="number" id="jumlah_peminjaman" name="jumlah_peminjaman" min="1" max="{{ $item->jumlah }}" required>
+
                                         <button type="submit" class="btn btn-primary">Pinjam</button>
                                     </form>
                                 </div>

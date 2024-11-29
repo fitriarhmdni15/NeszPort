@@ -16,8 +16,11 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->foreignId('barang_id')->constrained('barang')->onDelete('cascade');
             $table->string('nama_peminjam')->nullable();
+            $table->string('kelas_jurusan')->nullable();
             $table->integer('jumlah_peminjaman');
             $table->timestamp('tanggal_peminjaman');
+            $table->enum('status', ['Dipinjam', 'Dikembalikan'])->default('Dipinjam'); // Status peminjaman
+            $table->string('bukti_pengembalian')->nullable();
             $table->timestamps();
         });
     }

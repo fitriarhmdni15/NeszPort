@@ -5,57 +5,77 @@ namespace App\Http\Controllers;
 use App\Models\Peminjaman;
 use App\Models\Barang;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PeminjamanController extends Controller
 {
+    // Store peminjaman
     public function storePeminjaman(Request $request, $barang_id)
     {
+        // Validasi input
+        $validated = $request->validate([
+            'tanggal_peminjaman' => 'required|date',
+            'jumlah_peminjaman' => 'required|integer|min:1|max:10',
+        ]);
+
         $barang = Barang::findOrFail($barang_id);
 
-        if ($barang->jumlah < $request->jumlah_peminjaman) {
+        // Periksa stok barang
+        if ($barang->jumlah < $validated['jumlah_peminjaman']) {
             return redirect()->back()->with('error', 'Stok tidak cukup!');
         }
 
         // Kurangi stok barang
-        $barang->jumlah -= $request->jumlah_peminjaman;
-        $barang->save();
+        $barang->decrement('jumlah', $validated['jumlah_peminjaman']);
 
         // Simpan data peminjaman ke database
         Peminjaman::create([
             'user_id' => auth()->id(),
             'barang_id' => $barang->id,
-            'nama_peminjam' => $request->nama_peminjam,
-            'tanggal_peminjaman' => $request->tanggal_peminjaman,
-            'jumlah_peminjaman' => $request->jumlah_peminjaman,
+            'nama_peminjam' => auth()->user()->name, // Nama otomatis dari profil
+            'kelas_jurusan' => auth()->user()->kelas . ' - ' . auth()->user()->jurusan, // Otomatis
+            'tanggal_peminjaman' => $validated['tanggal_peminjaman'],
+            'jumlah_peminjaman' => $validated['jumlah_peminjaman'],
+            'status' => 'Dipinjam', // Tambahkan status default
         ]);
 
         return redirect()->route('peminjaman.history')->with('success', 'Peminjaman berhasil!');
     }
 
+    // Store pengembalian
     public function storePengembalian(Request $request, $peminjamanId)
     {
-        // Validasi role user
-        if (auth()->user()->role !== 'siswa') {
-            abort(403, 'Akses Ditolak');
-        }
-        $request->validate([
-            'bukti_pengembalian' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Validasi file gambar
-        ]); 
-        // Ambil peminjaman dari database
         $peminjaman = Peminjaman::findOrFail($peminjamanId);
-        // Ambil barang terkait
-        $barang = Barang::findOrFail($peminjaman->barang_id);
 
-        // Tambahkan stok barang kembali
-        $barang->jumlah += $peminjaman->jumlah_peminjaman;
-        $barang->save();
+        // Validasi input
+        $validated = $request->validate([
+            'bukti_pengembalian' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Validasi file
+        ]);
 
-        // Hapus peminjaman dari database
-        $peminjaman->delete();
+        // Simpan file bukti pengembalian
+        $path = $request->file('bukti_pengembalian')->store('bukti_pengembalian', 'public');
 
-        return redirect()->route('peminjaman.history')->with('success', 'Barang berhasil dikembalikan!');
+        // Gunakan transaksi database
+        DB::transaction(function () use ($peminjaman, $path) {
+            // Update status peminjaman
+            $peminjaman->update([
+                'status' => 'Dikembalikan',
+                'bukti_pengembalian' => $path,
+                'waktu_pengembalian' => now(),
+            ]);
+
+            // Update stok barang
+            $barang = Barang::findOrFail($peminjaman->barang_id);
+            $barang->increment('jumlah', $peminjaman->jumlah_peminjaman);
+        });
+
+        return redirect()->route('peminjaman.history')
+            ->with('success', 'Barang berhasil dikembalikan dan stok telah diperbarui.');
     }
 
+
+    // Tampilkan riwayat peminjaman
     public function history()
     {
         $peminjaman = Peminjaman::where('user_id', auth()->id())

@@ -33,7 +33,7 @@ class BarangController extends Controller
 
         Barang::create($validated);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Barang berhasil ditambahkan.');
+        return redirect()->route('admin.data_barang')->with('success', 'Barang berhasil ditambahkan.');
     }
 
     public function edit($id)
@@ -57,14 +57,14 @@ class BarangController extends Controller
 
         $barang->update($validated);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Barang berhasil diperbarui.');
+        return redirect()->route('admin.data_barang')->with('success', 'Barang berhasil diperbarui.');
     }
 
     public function destroy($id)
     {
         $barang = Barang::findOrFail($id);
         $barang->delete();
-        return redirect()->route('admin.dashboard')->with('success', 'Barang berhasil dihapus');
+        return redirect()->route('admin.data_barang')->with('success', 'Barang berhasil dihapus');
     }
 
     // Menampilkan stok barang untuk admin

@@ -18,7 +18,7 @@
             <input type="password" name="password_confirmation" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-success mt-3">Simpan</button>
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary mt-3">Kembali</a>
+        <a href="{{ route('admin.data_admin') }}" class="btn btn-secondary mt-3">Kembali</a>
     </form>
 </div>
 @endsection

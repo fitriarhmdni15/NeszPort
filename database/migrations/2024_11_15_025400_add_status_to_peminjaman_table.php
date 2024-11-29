@@ -9,22 +9,20 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up(): void
+    public function up()
     {
         Schema::table('peminjaman', function (Blueprint $table) {
-            //
-            $table->string('bukti_pengembalian')->nullable()->after('jumlah_peminjaman');
+            $table->string('status')->default('dipinjam'); // Default: 'dipinjam'
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down(): void
+    public function down()
     {
         Schema::table('peminjaman', function (Blueprint $table) {
-            //
-            $table->dropColumn('bukti_pengembalian');
+            $table->dropColumn('status');
         });
     }
 };

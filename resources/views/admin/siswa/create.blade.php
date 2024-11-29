@@ -17,8 +17,16 @@
             <label>Konfirmasi Password</label>
             <input type="password" name="password_confirmation" class="form-control" required>
         </div>
+        <div class="form-group">
+            <label>Nama</label>
+            <input type="text" name="name" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label>Kelas</label>
+            <input type="text" name="kelas" class="form-control" required>
+        </div>
         <button type="submit" class="btn btn-success mt-3">Simpan</button>
-        <a href="{{ route('admin.dashboard') }}" class="btn btn-secondary mt-3">Kembali</a>
+        <a href="{{ route('admin.data_siswa') }}" class="btn btn-secondary mt-3">Kembali</a>
     </form>
 </div>
 @endsection

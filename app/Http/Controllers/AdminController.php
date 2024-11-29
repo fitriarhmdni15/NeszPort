@@ -14,12 +14,31 @@ class AdminController extends Controller
 {
     public function dashboard()
     {
-        $barang = Barang::all();  // Data barang tetap terlihat di dashboard
-        $admins = User::where('role', 'admin')->get();  // Data admin
-        $siswa = User::where('role', 'siswa')->get();
-        $peminjaman = Peminjaman::with('barang', 'user')->get();
+        return view('admin.dashboard'); // Sesuaikan dengan nama view dashboard
+    }
 
-        return view('admin.dashboard', compact('barang', 'admins', 'siswa', 'peminjaman'));
+    public function dataSiswa()
+    {
+        $siswa = User::where('role', 'siswa')->get();
+        return view('admin.data_siswa', compact('siswa'));
+    }
+
+    public function dataBarang()
+    {
+        $barang = Barang::all();
+        return view('admin.data_barang', compact('barang'));
+    }
+
+    public function dataAdmin()
+    {
+        $admins = User::where('role', 'admin')->get();
+        return view('admin.data_admin', compact('admins'));
+    }
+
+    public function dataPeminjam()
+    {
+        $peminjaman = Peminjaman::with('barang', 'user')->get();
+        return view('admin.data_peminjam', compact('peminjaman'));
     }
 
     public function create()
@@ -41,7 +60,7 @@ class AdminController extends Controller
             'role' => 'admin', // Pastikan role adalah 'admin'
         ]);
 
-        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil ditambahkan!');
+        return redirect()->route('admin.data_admin')->with('success', 'Admin berhasil ditambahkan!');
     }
 
     public function edit($id)
@@ -70,14 +89,13 @@ class AdminController extends Controller
         // Tidak perlu mengubah role, karena sudah pasti admin
         $admin->save();
 
-        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil diperbarui!');
+        return redirect()->route('admin.data_admin')->with('success', 'Admin berhasil diperbarui!');
     }
 
     public function destroy($id)
     {
         User::findOrFail($id)->delete();
-
-        return redirect()->route('admin.dashboard')->with('success', 'Admin berhasil dihapus!');
+        return redirect()->route('admin.data_admin')->with('success', 'Admin berhasil dihapus!');
     }
 
 }

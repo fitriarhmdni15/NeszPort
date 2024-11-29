@@ -15,8 +15,12 @@ class Peminjaman extends Model
         'user_id',
         'barang_id',
         'nama_peminjam',
+        'kelas_jurusan',
         'tanggal_peminjaman',
         'jumlah_peminjaman',
+        'status',
+        'bukti_pengembalian',
+        'waktu_pengembalian',
     ];
     public function barang()
     {
