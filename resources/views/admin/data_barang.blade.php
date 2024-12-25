@@ -12,7 +12,6 @@
                 <tr>
                     <th>No</th>
                     <th>Nama Barang</th>
-                    <th>Gambar</th>
                     <th>Jumlah</th>
                     <th>Aksi</th>
                 </tr>
@@ -22,12 +21,10 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->nama_barang }}</td>
-                    <td>
-                        <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->nama_barang }}" width="80" class="img-thumbnail">
-                    </td>
                     <td>{{ $item->jumlah }}</td>
                     <td>
                         <div class="d-flex gap-2">
+                            <a href="{{ route('barang.show', $item->id) }}" class="btn btn-secondary btn-sm">Detail</a>
                             <a href="{{ route('barang.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
                             <form action="{{ route('barang.destroy', $item->id) }}" method="POST" class="d-inline">
                                 @csrf

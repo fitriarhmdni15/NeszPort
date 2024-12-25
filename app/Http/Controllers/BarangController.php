@@ -87,4 +87,10 @@ class BarangController extends Controller
 
         return redirect()->route('admin.barang.stok')->with('success', 'Stok barang berhasil diperbarui');
     }
+
+    public function show($id)
+    {
+        $barang = Barang::findOrFail($id);
+        return view('admin.barang.detail', compact('barang'));
+    }
 }

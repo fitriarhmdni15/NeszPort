@@ -25,9 +25,13 @@ Route::middleware('auth')->group(function () {
 
         // Admin CRUD
         Route::resource('admin', AdminController::class);
+
         // CRUD Barang alternatif
         Route::resource('barang', BarangController::class);
+
+        // CRUD Siswa
         Route::resource('siswa', SiswaController::class);
+
         // Update stok barang
         Route::get('/admin/barang/stok', [BarangController::class, 'showStok'])->name('admin.barang.stok');
         Route::post('/admin/barang/update-stok/{id}', [BarangController::class, 'updateStok'])->name('admin.barang.update-stok');
