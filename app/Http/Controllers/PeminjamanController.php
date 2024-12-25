@@ -31,10 +31,8 @@ class PeminjamanController extends Controller
 
         // Simpan data peminjaman ke database
         Peminjaman::create([
-            'user_id' => auth()->id(),
+            'user_id' => auth()->id(), // Ambil user yang sedang login
             'barang_id' => $barang->id,
-            'nama_peminjam' => auth()->user()->name, // Nama otomatis dari profil
-            'kelas_jurusan' => auth()->user()->kelas . ' - ' . auth()->user()->jurusan, // Otomatis
             'tanggal_peminjaman' => $validated['tanggal_peminjaman'],
             'jumlah_peminjaman' => $validated['jumlah_peminjaman'],
             'status' => 'Dipinjam', // Tambahkan status default
@@ -74,12 +72,11 @@ class PeminjamanController extends Controller
             ->with('success', 'Barang berhasil dikembalikan dan stok telah diperbarui.');
     }
 
-
     // Tampilkan riwayat peminjaman
     public function history()
     {
         $peminjaman = Peminjaman::where('user_id', auth()->id())
-            ->with('barang') // Relasi ke barang
+            ->with(['barang', 'user']) // Relasi ke barang dan user
             ->get();
 
         return view('siswa.history', compact('peminjaman'));

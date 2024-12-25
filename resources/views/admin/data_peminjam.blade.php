@@ -12,6 +12,7 @@
                     <th>No</th>
                     <th>Nama Barang</th>
                     <th>Nama Peminjam</th>
+                    <th>Kelas & Jurusan</th>
                     <th>Jumlah</th>
                     <th>Tanggal Peminjaman</th>
                     <th>Tanggal Pengembalian</th>
@@ -23,7 +24,8 @@
                 <tr>
                     <td>{{ $key + 1 }}</td>
                     <td>{{ $item->barang->nama_barang }}</td>
-                    <td>{{ $item->user->username }}</td>
+                    <td>{{ $item->user->name }}</td>
+                    <td>{{ $item->user->kelas }}</td>
                     <td>{{ $item->jumlah_peminjaman }}</td>
                     <td>{{ $item->tanggal_peminjaman }}</td>
                     <td>{{ $item->waktu_pengembalian ?? '-' }}</td>
