@@ -21,7 +21,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/data-siswa', [AdminController::class, 'dataSiswa'])->name('admin.data_siswa');
         Route::get('/data-barang', [AdminController::class, 'dataBarang'])->name('admin.data_barang');
         Route::get('/data-admin', [AdminController::class, 'dataAdmin'])->name('admin.data_admin');
+
+        // Bagian data peminjaman
         Route::get('/data-peminjam', [AdminController::class, 'dataPeminjam'])->name('admin.data_peminjam');
+        Route::get('peminjaman/{peminjaman}', [AdminController::class, 'show'])->name('admin.peminjaman.detail');
 
         // Admin CRUD
         Route::resource('admin', AdminController::class);

@@ -15,7 +15,7 @@
                     <th>Jumlah</th>
                     <th>Tanggal Peminjaman</th>
                     <th>Tanggal Pengembalian</th>
-                    <th>Bukti Pengembalian</th>
+                    <th>Aksi</th>
                 </tr>
             </thead>
             <tbody>
@@ -26,13 +26,9 @@
                     <td>{{ $item->user->username }}</td>
                     <td>{{ $item->jumlah_peminjaman }}</td>
                     <td>{{ $item->tanggal_peminjaman }}</td>
-                    <td>{{ $item->tanggal_pengembalian ?? '-' }}</td>
+                    <td>{{ $item->waktu_pengembalian ?? '-' }}</td>
                     <td>
-                        @if($item->bukti_pengembalian)
-                            <img src="{{ asset('storage/' . $item->bukti_pengembalian) }}" alt="Bukti Pengembalian" width="80" class="img-thumbnail">
-                        @else
-                            <span class="text-danger">Belum ada</span>
-                        @endif
+                        <a href="{{ route('admin.peminjaman.detail', $item->id) }}" class="btn btn-primary btn-sm">Detail</a>
                     </td>
                 </tr>
                 @endforeach

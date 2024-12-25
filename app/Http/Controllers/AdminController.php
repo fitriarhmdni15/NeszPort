@@ -35,10 +35,17 @@ class AdminController extends Controller
         return view('admin.data_admin', compact('admins'));
     }
 
+    // Peminjaman
     public function dataPeminjam()
     {
         $peminjaman = Peminjaman::with('barang', 'user')->get();
         return view('admin.data_peminjam', compact('peminjaman'));
+    }
+
+    public function show($id)
+    {
+        $peminjaman = Peminjaman::with(['barang', 'user'])->findOrFail($id);
+        return view('admin.peminjaman.detail', compact('peminjaman'));
     }
 
     public function create()
