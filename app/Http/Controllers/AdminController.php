@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Models\Siswa;
 use App\Models\Peminjaman;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
@@ -40,6 +41,30 @@ class AdminController extends Controller
     {
         $peminjaman = Peminjaman::with('barang', 'user')->get();
         return view('admin.data_peminjam', compact('peminjaman'));
+    }
+
+    public function approvePengembalian($peminjamanId)
+    {
+        DB::beginTransaction();
+
+        try {
+            $peminjaman = Peminjaman::findOrFail($peminjamanId);
+
+            $barang = $peminjaman->barang;
+            if ($barang) {
+                $barang->jumlah += $peminjaman->jumlah_peminjaman;
+                $barang->save();
+            }
+
+            $peminjaman->update(['status' => 'Disetujui']);
+
+            DB::commit();
+
+            return redirect()->route('admin.data_peminjam')->with('success', 'Pengembalian berhasil disetujui dan stok diperbarui.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return redirect()->route('admin.data_peminjam')->with('error', 'Terjadi kesalahan. Pengembalian gagal diproses.');
+        }
     }
 
     public function show($id)

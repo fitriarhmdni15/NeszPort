@@ -9,19 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::table('peminjaman', function (Blueprint $table) {
-            $table->string('status')->default('dipinjam'); // Default: 'dipinjam'
+            //
+            $table->dropColumn('status');
+            $table->enum('status', ['Dipinjam', 'Diajukan', 'Disetujui'])->default('Dipinjam');
         });
     }
 
     /**
      * Reverse the migrations.
      */
-    public function down()
+    public function down(): void
     {
         Schema::table('peminjaman', function (Blueprint $table) {
+            //
+            $table->string('status')->nullable();
             $table->dropColumn('status');
         });
     }

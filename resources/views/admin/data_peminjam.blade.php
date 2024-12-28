@@ -31,6 +31,15 @@
                     <td>{{ $item->waktu_pengembalian ?? '-' }}</td>
                     <td>
                         <a href="{{ route('admin.peminjaman.detail', $item->id) }}" class="btn btn-primary btn-sm">Detail</a>
+
+                        @if ($item->status === 'Diajukan')
+                            <form action="{{ route('pengembalian.approve', ['peminjamanId' => $item->id]) }}" method="POST" style="display:inline;">
+                                @csrf
+                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                            </form>
+                        @else
+                            <button class="btn btn-secondary btn-sm" disabled>Approved</button>
+                        @endif
                     </td>
                 </tr>
                 @endforeach

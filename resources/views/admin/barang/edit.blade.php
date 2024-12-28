@@ -21,7 +21,7 @@
             <input type="number" name="jumlah" class="form-control" value="{{ $barang->jumlah }}" required>
         </div>
         <button type="submit" class="btn btn-success mt-3">Update</button>
-        <a href="{{ route('admin.data_barang) }}" class="btn btn-secondary mt-3">Kembali</a>
+        <a href="{{ route('admin.data_barang') }}" class="btn btn-secondary mt-3">Kembali</a>
     </form>
 </div>
 @endsection

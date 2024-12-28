@@ -48,7 +48,8 @@ class PeminjamanController extends Controller
 
         // Validasi input
         $validated = $request->validate([
-            'bukti_pengembalian' => 'required|image|mimes:jpeg,png,jpg|max:2048', // Validasi file
+            'bukti_pengembalian' => 'required|image|mimes:jpeg,png,jpg|max:2048',
+            'waktu_pengembalian' => 'required|date',
         ]);
 
         // Simpan file bukti pengembalian
@@ -58,18 +59,13 @@ class PeminjamanController extends Controller
         DB::transaction(function () use ($peminjaman, $path) {
             // Update status peminjaman
             $peminjaman->update([
-                'status' => 'Dikembalikan',
                 'bukti_pengembalian' => $path,
                 'waktu_pengembalian' => now(),
+                'status' => 'Diajukan',
             ]);
-
-            // Update stok barang
-            $barang = Barang::findOrFail($peminjaman->barang_id);
-            $barang->increment('jumlah', $peminjaman->jumlah_peminjaman);
         });
 
-        return redirect()->route('peminjaman.history')
-            ->with('success', 'Barang berhasil dikembalikan dan stok telah diperbarui.');
+        return redirect()->route('peminjaman.history')->with('success', 'Pengajuan Pengembalian Berhasil.');
     }
 
     // Tampilkan riwayat peminjaman

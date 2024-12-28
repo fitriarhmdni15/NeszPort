@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('peminjaman', function (Blueprint $table) {
             //
-            $table->string('bukti_pengembalian')->nullable()->after('jumlah_peminjaman');
+            $table->boolean('is_approved')->default(false)->after('status');
         });
     }
 
@@ -24,7 +24,7 @@ return new class extends Migration
     {
         Schema::table('peminjaman', function (Blueprint $table) {
             //
-            $table->dropColumn('bukti_pengembalian');
+            $table->dropColumn('is_approved');
         });
     }
 };

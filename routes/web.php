@@ -25,6 +25,7 @@ Route::middleware('auth')->group(function () {
         // Bagian data peminjaman
         Route::get('/data-peminjam', [AdminController::class, 'dataPeminjam'])->name('admin.data_peminjam');
         Route::get('peminjaman/{peminjaman}', [AdminController::class, 'show'])->name('admin.peminjaman.detail');
+        Route::post('/pengembalian/{peminjamanId}/approve', [AdminController::class, 'approvePengembalian'])->name('pengembalian.approve');
 
         // Admin CRUD
         Route::resource('admin', AdminController::class);
