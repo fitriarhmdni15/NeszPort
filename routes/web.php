@@ -56,3 +56,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/history', [PeminjamanController::class, 'history'])->name('peminjaman.history');
     Route::post('/pengembalian/{peminjamanId}', [PeminjamanController::class, 'storePengembalian'])->name('pengembalian.store');
 });
+
+
+// Rute logout
+Route::get('/logout', function () {
+    if (auth()->check()) {
+        auth()->logout();
+        session()->invalidate();
+        session()->regenerateToken();
+    }
+    return redirect('/'); // Redirect ke halaman utama
+})->name('logout.get');

@@ -1,4 +1,4 @@
-<?php
+<?php 
 
 namespace App\Http\Controllers;
 
@@ -15,7 +15,6 @@ class PeminjamanController extends Controller
     {
         // Validasi input
         $validated = $request->validate([
-            'tanggal_peminjaman' => 'required|date',
             'jumlah_peminjaman' => 'required|integer|min:1|max:10',
         ]);
 
@@ -33,7 +32,7 @@ class PeminjamanController extends Controller
         Peminjaman::create([
             'user_id' => auth()->id(), // Ambil user yang sedang login
             'barang_id' => $barang->id,
-            'tanggal_peminjaman' => $validated['tanggal_peminjaman'],
+            'tanggal_peminjaman' => now(), // Tanggal dan waktu sekarang otomatis
             'jumlah_peminjaman' => $validated['jumlah_peminjaman'],
             'status' => 'Dipinjam', // Tambahkan status default
         ]);
@@ -49,7 +48,6 @@ class PeminjamanController extends Controller
         // Validasi input
         $validated = $request->validate([
             'bukti_pengembalian' => 'required|image|mimes:jpeg,png,jpg|max:2048',
-            'waktu_pengembalian' => 'required|date',
         ]);
 
         // Simpan file bukti pengembalian
@@ -60,7 +58,7 @@ class PeminjamanController extends Controller
             // Update status peminjaman
             $peminjaman->update([
                 'bukti_pengembalian' => $path,
-                'waktu_pengembalian' => now(),
+                'waktu_pengembalian' => now(), // Tanggal dan waktu pengembalian otomatis
                 'status' => 'Diajukan',
             ]);
         });
